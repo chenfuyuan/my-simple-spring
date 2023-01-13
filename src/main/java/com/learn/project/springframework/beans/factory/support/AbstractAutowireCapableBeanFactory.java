@@ -1,6 +1,8 @@
 package com.learn.project.springframework.beans.factory.support;
 
-import java.lang.reflect.InvocationTargetException;
+import com.learn.project.springframework.beans.BeansException;
+
+import java.lang.reflect.Constructor;
 
 /**
  * AbstractAutowireCapableBeanFactory
@@ -10,27 +12,49 @@ import java.lang.reflect.InvocationTargetException;
  */
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
 
+    private InstantiationStrategy instantiationStrategy = new CglibInstantiationStrategy();
+
     @Override
-    protected Object createBean(String beanName, RootBeanDefinition mbd) {
-        return doCreateBean(beanName, mbd, null);
+    protected Object createBean(String beanName, RootBeanDefinition mbd,Object[] args) {
+        return doCreateBean(beanName, mbd, args);
     }
 
-    protected Object doCreateBean(String beanName, RootBeanDefinition mdb, Object[] args) {
+    protected Object doCreateBean(String beanName, RootBeanDefinition mbd, Object[] args) {
         Object bean = null;
         try {
-            Class<?> beanClass = mdb.getBeanClass();
-            bean = beanClass.getDeclaredConstructor(null).newInstance(args);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            bean = createBeanInstance(mbd, beanName, args);
+        } catch (Exception e) {
+            throw new BeansException("Instantiation of bean failed", e);
         }
         //缓存实例化的单例bean
         addSingleton(beanName,bean);
         return bean;
+    }
+
+    /**
+     * 创建Bean对象
+     * @param beanDefinition
+     * @param beanName
+     * @param args
+     * @return
+     */
+    protected Object createBeanInstance(RootBeanDefinition beanDefinition, String beanName, Object[] args) {
+        Constructor constructorToUse = null;
+        if (args != null) {
+            //寻找对应的构造器
+            Class<?> beanClass = beanDefinition.getBeanClass();
+            Constructor<?>[] constructors = beanClass.getDeclaredConstructors();
+            for (Constructor<?> constructor : constructors) {
+                //参数数量一样
+                Class<?>[] parameterTypes = constructor.getParameterTypes();
+                int parameterTypeSize = parameterTypes.length;
+                if (parameterTypeSize == args.length) {
+                    //TODO 当存在多个参数数量一样的构造器时，如何解决？
+                    constructorToUse = constructor;
+                    break;
+                }
+            }
+        }
+        return instantiationStrategy.instantiate(beanDefinition, beanName, constructorToUse, args);
     }
 }

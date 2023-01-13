@@ -3,6 +3,7 @@ package com.learn.project.springframework.beans.factory.support;
 import com.learn.project.springframework.beans.BeansException;
 import com.learn.project.springframework.beans.factory.BeanFactory;
 import com.learn.project.springframework.beans.factory.config.BeanDefinition;
+import com.sun.jdi.connect.Connector;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,15 +25,20 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      */
     @Override
     public Object getBean(String beanName) {
-        return doGetBean(beanName);
+        return doGetBean(beanName, null);
     }
 
-    protected Object doGetBean(String beanName) {
+    @Override
+    public Object getBean(String beanName, Object... args) {
+        return doGetBean(beanName,args);
+    }
+
+    protected Object doGetBean(String beanName,Object... args) {
         Object bean = getSingleton(beanName);
         if (bean != null) {
             return bean;
         }
-        bean = createBean(beanName, getMergedBeanDefinition(beanName));
+        bean = createBean(beanName, getMergedBeanDefinition(beanName),args);
         return bean;
     }
 
@@ -58,6 +64,6 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      * @param mbd
      * @return
      */
-    protected abstract Object createBean(String beanName, RootBeanDefinition mbd);
+    protected abstract Object createBean(String beanName, RootBeanDefinition mbd,Object[] args);
 
 }

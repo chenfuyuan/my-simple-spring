@@ -8,8 +8,19 @@ package com.learn.project.springframework.service;
  */
 public class UserService {
 
+    private String userName;
+
+    public UserService(String userName) {
+        this.userName = userName;
+    }
+
+    public UserService() {
+        this.userName = "default";
+    }
+
+
     public void queryUserInfo() {
-        System.out.println("查询用户信息!");
+        System.out.println("查询用户信息!name="+userName);
     }
 
 
