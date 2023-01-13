@@ -37,4 +37,8 @@ public abstract class AbstractBeanDefinition implements BeanDefinition {
         return this.beanClass;
     }
 
+    @Override
+    public String getBeanClassName() {
+        return this.beanClass.getName();
+    }
 }

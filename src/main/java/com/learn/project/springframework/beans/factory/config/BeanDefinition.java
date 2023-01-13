@@ -8,5 +8,10 @@ package com.learn.project.springframework.beans.factory.config;
  */
 public interface BeanDefinition {
 
+    /**
+     * 获取BeanClass名称
+     * @return
+     */
+    String getBeanClassName();
 
 }

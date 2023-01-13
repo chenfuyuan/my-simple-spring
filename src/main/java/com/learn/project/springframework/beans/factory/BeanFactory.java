@@ -14,4 +14,12 @@ public interface BeanFactory {
      * @return
      */
     Object getBean(String beanName);
+
+    /**
+     * 根据传入参数构造对象
+     * @param beanName
+     * @param args
+     * @return
+     */
+    Object getBean(String beanName, Object... args);
 }
