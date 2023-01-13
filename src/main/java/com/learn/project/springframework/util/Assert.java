@@ -17,4 +17,10 @@ public abstract class Assert {
     public static void isTrue(boolean expression) {
         isTrue(expression, "[Assertion failed] - this expression must be true");
     }
+
+    public static void notNull(Object object, String message) {
+        if (object == null) {
+            throw new IllegalArgumentException(message);
+        }
+    }
 }

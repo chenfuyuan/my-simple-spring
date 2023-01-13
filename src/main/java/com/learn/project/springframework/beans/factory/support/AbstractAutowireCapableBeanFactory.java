@@ -39,22 +39,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @return
      */
     protected Object createBeanInstance(RootBeanDefinition beanDefinition, String beanName, Object[] args) {
-        Constructor constructorToUse = null;
-        if (args != null) {
-            //寻找对应的构造器
-            Class<?> beanClass = beanDefinition.getBeanClass();
-            Constructor<?>[] constructors = beanClass.getDeclaredConstructors();
-            for (Constructor<?> constructor : constructors) {
-                //参数数量一样
-                Class<?>[] parameterTypes = constructor.getParameterTypes();
-                int parameterTypeSize = parameterTypes.length;
-                if (parameterTypeSize == args.length) {
-                    //TODO 当存在多个参数数量一样的构造器时，如何解决？
-                    constructorToUse = constructor;
-                    break;
-                }
-            }
-        }
+        ConstructorResolver constructorResolver = new ConstructorResolver(this);
+        //解析出对应的构造器
+        Constructor constructorToUse = constructorResolver.autowireConstructor(beanName, beanDefinition, null, args);
         return instantiationStrategy.instantiate(beanDefinition, beanName, constructorToUse, args);
     }
 }
