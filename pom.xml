@@ -14,9 +14,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.jupiter.version>5.9.0</junit.jupiter.version>
         <cglib.version>3.3.0</cglib.version>
+        <hutool.all.version>5.8.11</hutool.all.version>
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.all.version}</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/cglib/cglib -->
         <dependency>
             <groupId>cglib</groupId>

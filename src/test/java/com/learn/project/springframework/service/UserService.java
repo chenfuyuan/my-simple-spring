@@ -1,5 +1,7 @@
 package com.learn.project.springframework.service;
 
+import com.learn.project.springframework.dao.UserDao;
+
 /**
  * UserService
  *
@@ -8,29 +10,14 @@ package com.learn.project.springframework.service;
  */
 public class UserService {
 
-    private String userName;
+    private String uId;
 
-    private static final String DEFAULT_NAME = "default";
+    private UserDao userDao;
 
-    private int age;
-
-    public UserService(String userName) {
-        this.userName = userName;
-        this.age = 0;
-    }
-
-    public UserService(int age) {
-        this.userName = DEFAULT_NAME;
-        this.age=age;
-    }
-
-    public UserService() {
-        this.userName = DEFAULT_NAME;
-    }
 
 
     public void queryUserInfo() {
-        System.out.println("查询用户信息!name="+userName+"  age:" + age);
+        System.out.println("查询用户信息!name=" + userDao.queryUserName(uId));
     }
 
 

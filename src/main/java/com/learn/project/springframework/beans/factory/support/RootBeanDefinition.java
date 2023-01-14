@@ -1,5 +1,6 @@
 package com.learn.project.springframework.beans.factory.support;
 
+import com.learn.project.springframework.beans.MutablePropertyValues;
 import com.learn.project.springframework.beans.factory.config.BeanDefinition;
 
 /**
@@ -12,6 +13,11 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 
     public RootBeanDefinition(Class<?> beanClass) {
+        setBeanClass(beanClass);
+    }
+
+    public RootBeanDefinition(Class<?> beanClass, MutablePropertyValues propertyValues) {
+        super(propertyValues);
         setBeanClass(beanClass);
     }
 

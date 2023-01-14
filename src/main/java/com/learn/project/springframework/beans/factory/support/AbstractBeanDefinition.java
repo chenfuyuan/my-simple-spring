@@ -1,6 +1,6 @@
 package com.learn.project.springframework.beans.factory.support;
 
-import com.learn.project.springframework.beans.BeansException;
+import com.learn.project.springframework.beans.MutablePropertyValues;
 import com.learn.project.springframework.beans.factory.config.BeanDefinition;
 
 /**
@@ -14,15 +14,28 @@ public abstract class AbstractBeanDefinition implements BeanDefinition {
     /**
      * 对应的beanClass
      */
-    private Class beanClass;
+    private Class<?> beanClass;
+
+    /**
+     * 属性值
+     */
+    private MutablePropertyValues propertyValues;
+
 
     protected AbstractBeanDefinition() {
 
     }
 
+    protected AbstractBeanDefinition(MutablePropertyValues propertyValues) {
+        this.propertyValues = propertyValues;
+    }
+
     protected AbstractBeanDefinition(BeanDefinition original) {
         if (original instanceof AbstractBeanDefinition originalAbd) {
             setBeanClass(originalAbd.getBeanClass());
+            if (originalAbd.hasPropertyValues()) {
+                setPropertyValues(new MutablePropertyValues(originalAbd.getPropertyValues()));
+            }
         }
     }
 
@@ -40,5 +53,18 @@ public abstract class AbstractBeanDefinition implements BeanDefinition {
     @Override
     public String getBeanClassName() {
         return this.beanClass.getName();
+    }
+
+    public MutablePropertyValues getPropertyValues() {
+        return propertyValues;
+    }
+
+    public void setPropertyValues(MutablePropertyValues propertyValues) {
+        this.propertyValues = propertyValues;
+    }
+
+    @Override
+    public boolean hasPropertyValues() {
+        return this.propertyValues != null && !this.propertyValues.isEmpty();
     }
 }

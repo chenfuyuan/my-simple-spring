@@ -1,8 +1,13 @@
 package com.learn.project.springframework.testcase;
 
+import com.learn.project.springframework.beans.MutablePropertyValues;
+import com.learn.project.springframework.beans.PropertyValue;
+import com.learn.project.springframework.beans.PropertyValues;
 import com.learn.project.springframework.beans.factory.config.BeanDefinition;
+import com.learn.project.springframework.beans.factory.config.RuntimeBeanReference;
 import com.learn.project.springframework.beans.factory.support.DefaultListableBeanFactory;
 import com.learn.project.springframework.beans.factory.support.RootBeanDefinition;
+import com.learn.project.springframework.dao.UserDao;
 import com.learn.project.springframework.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,13 +22,21 @@ public class BeanFactoryTest {
 
     private static final String USER_SERVICE_BEAN_NAME = "userService";
 
+    private static final String USER_DAO_BEAN_NAME = "userDao";
+
     private DefaultListableBeanFactory defaultBeanFactory;
 
     @BeforeEach
     public void initBefore() {
         defaultBeanFactory = new DefaultListableBeanFactory();
 
-        BeanDefinition userServiceDefinition = new RootBeanDefinition(UserService.class);
+        BeanDefinition userDaoDefinition = new RootBeanDefinition(UserDao.class);
+        defaultBeanFactory.registerBeanDefinition(USER_DAO_BEAN_NAME, userDaoDefinition);
+        //userService
+        MutablePropertyValues propertyValues = new MutablePropertyValues();
+        propertyValues.addPropertyValue(new PropertyValue(USER_DAO_BEAN_NAME, new RuntimeBeanReference(USER_DAO_BEAN_NAME)));
+        propertyValues.addPropertyValue(new PropertyValue("uId", "10001"));
+        BeanDefinition userServiceDefinition = new RootBeanDefinition(UserService.class,propertyValues);
         defaultBeanFactory.registerBeanDefinition(USER_SERVICE_BEAN_NAME, userServiceDefinition);
     }
 
@@ -39,7 +52,7 @@ public class BeanFactoryTest {
 
     @Test
     public void testBeanFactoryHaveArgs() {
-        UserService userService = (UserService) defaultBeanFactory.getBean(USER_SERVICE_BEAN_NAME,"张三");
+        UserService userService = (UserService) defaultBeanFactory.getBean(USER_SERVICE_BEAN_NAME);
         userService.queryUserInfo();
     }
 }
