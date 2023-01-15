@@ -13,7 +13,6 @@ import java.lang.reflect.Method;
  */
 public class BeanWrapperImpl extends AbstractNestablePropertyAccessor implements BeanWrapper {
 
-
     /**
      * 缓存内省结果
      */

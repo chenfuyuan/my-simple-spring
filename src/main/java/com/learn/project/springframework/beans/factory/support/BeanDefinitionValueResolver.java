@@ -1,6 +1,5 @@
 package com.learn.project.springframework.beans.factory.support;
 
-import com.learn.project.springframework.beans.PropertyValue;
 import com.learn.project.springframework.beans.factory.config.BeanDefinition;
 import com.learn.project.springframework.beans.factory.config.RuntimeBeanReference;
 
