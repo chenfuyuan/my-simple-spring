@@ -32,6 +32,9 @@ public class MutablePropertyValues implements PropertyValues {
         }
     }
 
+    public MutablePropertyValues(List<PropertyValue> propertyValueList) {
+        this.propertyValueList = propertyValueList != null ? propertyValueList : Lists.newArrayList(0);
+    }
 
     @Override
     public PropertyValue[] getPropertyValues() {

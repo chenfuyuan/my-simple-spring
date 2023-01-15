@@ -6,7 +6,7 @@ package com.learn.project.springframework.beans;
  * @author chenfuyuan
  * @date 2023/1/14 13:01
  */
-public interface BeanWrapper {
+public interface BeanWrapper extends ConfigurablePropertyAccessor {
 
     /**
      * 获取实例对象

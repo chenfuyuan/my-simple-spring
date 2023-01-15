@@ -1,5 +1,7 @@
 package com.learn.project.springframework.beans.factory.support;
 
+import com.learn.project.springframework.beans.BeanWrapper;
+import com.learn.project.springframework.beans.BeanWrapperImpl;
 import com.learn.project.springframework.beans.BeansException;
 import com.learn.project.springframework.util.MethodInvoker;
 
@@ -21,9 +23,12 @@ public class ConstructorResolver {
         this.beanFactory = beanFactory;
     }
 
-    public Constructor autowireConstructor(String beanName, RootBeanDefinition beanDefinition, Constructor[] choseConstructors, Object[] explicitArgs) {
+    public BeanWrapper autowireConstructor(String beanName, RootBeanDefinition beanDefinition, Constructor[] choseConstructors, Object[] explicitArgs) {
+        BeanWrapperImpl beanWrapper = new BeanWrapperImpl();
         if (explicitArgs == null) {
-            return null;
+            Object instance = instantiate(beanName, beanDefinition, null, null);
+            beanWrapper.setBeanInstance(instance);
+            return beanWrapper;
         }
         Constructor<?> constructorToUse = null;
         Object[] argsToUse = explicitArgs;
@@ -78,10 +83,18 @@ public class ConstructorResolver {
             throw new BeansException("Could not resolve matching constructor on bean class[" + beanDefinition.getBeanClassName() + "]" +
                     "(hint: specify index/type/name arguments for simple parameters to avoid type ambiguities)");
         }
+        Object bean = instantiate(beanName, beanDefinition, constructorToUse, argsToUse);
+        beanWrapper.setBeanInstance(bean);
+        return beanWrapper;
+    }
 
-
-        return constructorToUse;
-
+    private Object instantiate(String beanName, RootBeanDefinition beanDefinition, Constructor<?> constructorToUse, Object[] argsToUse) {
+        try {
+            InstantiationStrategy strategy = this.beanFactory.getInstantiationStrategy();
+            return strategy.instantiate(beanDefinition, beanName, constructorToUse, argsToUse);
+        } catch (Throwable ex) {
+            throw new BeansException(ex.getMessage(),ex);
+        }
     }
 
     private static class ArgumentsHolder {
