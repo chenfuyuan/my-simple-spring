@@ -29,6 +29,11 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     }
 
     @Override
+    public <T> T getBean(String beanName, Class<T> beanType) {
+        return (T) getBean(beanName);
+    }
+
+    @Override
     public Object getBean(String beanName, Object... args) {
         return doGetBean(beanName,args);
     }

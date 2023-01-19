@@ -22,4 +22,12 @@ public interface BeanFactory {
      * @return
      */
     Object getBean(String beanName, Object... args);
+
+    /**
+     * 获取bean，
+     * @param beanName
+     * @param beanType
+     * @return
+     */
+    <T> T getBean(String beanName,Class<T> beanType);
 }

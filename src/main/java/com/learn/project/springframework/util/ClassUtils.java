@@ -58,4 +58,27 @@ public class ClassUtils {
             return resolvedWrapper != null && lhsType.isAssignableFrom(resolvedWrapper);
         }
     }
+
+    public static ClassLoader getDefaultClassLoader() {
+        ClassLoader classLoader = null;
+        try {
+            classLoader = Thread.currentThread().getContextClassLoader();
+        } catch (Throwable ex) {
+            // 获取当前线程的classLoader失败
+        }
+        if (classLoader == null) {
+            // 获取ClassUtils的classLoader
+            classLoader = ClassUtils.class.getClassLoader();
+            if (classLoader == null) {
+                try {
+                    //获取系统的ClassLoader
+                    classLoader = ClassLoader.getSystemClassLoader();
+                } catch (Throwable ex) {
+                    // 获取系统的ClassLoader失败,或许调用者接受空的classLoader
+                    // Cannot access system ClassLoader - oh well, maybe the caller can live with null...
+                }
+            }
+        }
+        return classLoader;
+    }
 }

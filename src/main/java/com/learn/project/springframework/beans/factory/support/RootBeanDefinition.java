@@ -13,7 +13,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 
     public RootBeanDefinition(Class<?> beanClass) {
-        setBeanClass(beanClass);
+        this(beanClass, new MutablePropertyValues());
     }
 
     public RootBeanDefinition(Class<?> beanClass, MutablePropertyValues propertyValues) {
