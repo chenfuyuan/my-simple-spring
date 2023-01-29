@@ -1,15 +1,13 @@
 package com.learn.project.springframework.beans.factory.support;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.learn.project.springframework.beans.BeanWrapper;
 import com.learn.project.springframework.beans.BeansException;
 import com.learn.project.springframework.beans.MutablePropertyValues;
 import com.learn.project.springframework.beans.PropertyValue;
 import com.learn.project.springframework.beans.PropertyValues;
-import com.learn.project.springframework.beans.factory.config.BeanReference;
+import com.learn.project.springframework.beans.factory.config.BeanPostProcessor;
 import com.learn.project.springframework.util.Lists;
 
-import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,9 +32,68 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         //填充bean
         populateBean(beanName, mbd, instanceWrapper);
         Object bean = instanceWrapper.getWrappedInstance();
+        bean = initializeBean(beanName, bean, mbd);
         //缓存实例化的单例bean
         addSingleton(beanName, bean);
         return bean;
+    }
+
+    private Object initializeBean(String beanName, Object bean, RootBeanDefinition mbd) {
+        // 1. 执行 BeanPostProcessor Before 处理
+        Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
+
+        // 执行 Bean 对象的初始化方法
+        try {
+            //TODO 待完成invokeInitMethods
+            invokeInitMethods(beanName,wrappedBean, mbd);
+        } catch (Exception e) {
+            throw new BeansException("Invocation of init method of bean[" + beanName + "] failed", e);
+        }
+
+        // 2. 执行 BeanPostProcessor After 处理
+        wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
+        return wrappedBean;
+    }
+
+    private void invokeInitMethods(String beanName, Object bean, RootBeanDefinition mbd) throws Exception{
+
+    }
+
+
+    /**
+     * 执行后置操作
+     * @param existingBean
+     * @param beanName
+     * @return
+     */
+    private Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) {
+        Object result = existingBean;
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            Object current = beanPostProcessor.postProcessBeforeInitialization(result, beanName);
+            if (null == current) {
+                return result;
+            }
+            result = current;
+        }
+        return result;
+    }
+
+    /**
+     * 执行前置操作
+     * @param existingBean
+     * @param beanName
+     * @return
+     */
+    private Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) {
+        Object result = existingBean;
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            Object current = beanPostProcessor.postProcessAfterInitialization(result, beanName);
+            if (null == current) {
+                return result;
+            }
+            result = current;
+        }
+        return result;
     }
 
     /**

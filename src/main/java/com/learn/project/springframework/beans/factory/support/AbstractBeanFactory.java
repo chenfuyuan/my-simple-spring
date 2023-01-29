@@ -2,9 +2,13 @@ package com.learn.project.springframework.beans.factory.support;
 
 import com.learn.project.springframework.beans.BeansException;
 import com.learn.project.springframework.beans.factory.BeanFactory;
+import com.learn.project.springframework.beans.factory.ConfigurableBeanFactory;
 import com.learn.project.springframework.beans.factory.config.BeanDefinition;
+import com.learn.project.springframework.beans.factory.config.BeanPostProcessor;
 import com.sun.jdi.connect.Connector;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,9 +18,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author chenfuyuan
  * @date 2023/1/7 16:41
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
 
     private Map<String, RootBeanDefinition> mergedBeanDefinitions = new ConcurrentHashMap<>();
+
+    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
     /**
      * 使用模板方法 统一收口通用核心方法的调用逻辑和标准定义
@@ -71,4 +77,13 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      */
     protected abstract Object createBean(String beanName, RootBeanDefinition mbd,Object[] args);
 
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        this.beanPostProcessors.remove(beanPostProcessor);
+        this.beanPostProcessors.add(beanPostProcessor);
+    }
+
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return this.beanPostProcessors;
+    }
 }

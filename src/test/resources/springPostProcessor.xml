@@ -10,4 +10,7 @@
         <property name="company" value="腾讯"/>
         <property name="location" value="深圳"/>
     </bean>
+
+    <bean class="com.learn.project.springframework.common.MyBeanFactoryPostProcessor"/>
+    <bean class="com.learn.project.springframework.common.MyBeanPostProcessor"/>
 </beans>

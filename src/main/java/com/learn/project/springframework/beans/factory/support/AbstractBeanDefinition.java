@@ -55,6 +55,8 @@ public abstract class AbstractBeanDefinition implements BeanDefinition {
         return this.beanClass.getName();
     }
 
+
+    @Override
     public MutablePropertyValues getPropertyValues() {
         return propertyValues;
     }

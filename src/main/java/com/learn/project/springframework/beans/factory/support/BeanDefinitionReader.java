@@ -1,5 +1,6 @@
 package com.learn.project.springframework.beans.factory.support;
 
+import com.learn.project.springframework.beans.BeansException;
 import com.learn.project.springframework.core.io.Resource;
 import com.learn.project.springframework.core.io.ResourceLoader;
 
@@ -20,4 +21,6 @@ public interface BeanDefinitionReader {
     void loadBeanDefinitions(Resource... resources);
 
     void loadBeanDefinitions(String location);
+
+    void loadBeanDefinitions(String... locations) throws BeansException;
 }

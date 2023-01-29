@@ -1,6 +1,7 @@
 package com.learn.project.springframework.beans.factory;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * ListableBeanFactory
@@ -16,7 +17,7 @@ public interface ListableBeanFactory extends BeanFactory{
      * @return
      * @param <T>
      */
-    <T> List<T> getBeansOfType(Class<T> type);
+    <T>Map<String,T> getBeansOfType(Class<T> type);
 
 
 }
