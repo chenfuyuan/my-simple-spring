@@ -24,6 +24,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         refreshBeanFactory();
         //2. 获取BeanFactory
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+        // 添加ApplicationContextAwareProcessor，让继承自ApplicationContextAware的对象可以感知到所属的ApplicationContext
+        beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
         //3. 在Bean实例化之前，执行BeanFactoryPostProcessor
         invokeBeanFactoryPostProcessors(beanFactory);
         //4. BeanPostProcessor 需要提前于其他Bean对象实例化之前执行注册操作

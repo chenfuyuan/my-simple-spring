@@ -5,10 +5,14 @@ import com.learn.project.springframework.beans.BeansException;
 import com.learn.project.springframework.beans.MutablePropertyValues;
 import com.learn.project.springframework.beans.PropertyValue;
 import com.learn.project.springframework.beans.PropertyValues;
+import com.learn.project.springframework.beans.factory.Aware;
+import com.learn.project.springframework.beans.factory.BeanClassLoaderAware;
+import com.learn.project.springframework.beans.factory.BeanFactoryAware;
+import com.learn.project.springframework.beans.factory.BeanNameAware;
 import com.learn.project.springframework.beans.factory.DisposableBean;
 import com.learn.project.springframework.beans.factory.InitializingBean;
-import com.learn.project.springframework.beans.factory.config.BeanDefinition;
 import com.learn.project.springframework.beans.factory.config.BeanPostProcessor;
+import com.learn.project.springframework.context.ApplicationContextAware;
 import com.learn.project.springframework.util.Lists;
 import com.learn.project.springframework.util.StringUtils;
 
@@ -46,12 +50,16 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     private Object initializeBean(String beanName, Object bean, RootBeanDefinition mbd) {
+
+        // invokeAwareMethods
+        invokeAwareMethods(bean,beanName);
+
+
         // 1. 执行 BeanPostProcessor Before 处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
 
         // 执行 Bean 对象的初始化方法
         try {
-            //TODO 待完成invokeInitMethods
             invokeInitMethods(beanName,wrappedBean, mbd);
         } catch (Exception e) {
             throw new BeansException("Invocation of init method of bean[" + beanName + "] failed", e);
@@ -60,6 +68,21 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         // 2. 执行 BeanPostProcessor After 处理
         wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
         return wrappedBean;
+    }
+
+    private void invokeAwareMethods(Object bean, String beanName) {
+        if (!(bean instanceof Aware)) {
+            return;
+        }
+        if (bean instanceof BeanFactoryAware) {
+            ((BeanFactoryAware) bean).setBeanFactory(this);
+        }
+        if (bean instanceof BeanNameAware) {
+            ((BeanNameAware) bean).setBeanName(beanName);
+        }
+        if (bean instanceof BeanClassLoaderAware) {
+            ((BeanClassLoaderAware) bean).setBeanClassLoader(getClassLoader());
+        }
     }
 
     private void invokeInitMethods(String beanName, Object bean, RootBeanDefinition mbd) throws Exception{

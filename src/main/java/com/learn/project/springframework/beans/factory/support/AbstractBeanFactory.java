@@ -5,6 +5,7 @@ import com.learn.project.springframework.beans.factory.BeanFactory;
 import com.learn.project.springframework.beans.factory.ConfigurableBeanFactory;
 import com.learn.project.springframework.beans.factory.config.BeanDefinition;
 import com.learn.project.springframework.beans.factory.config.BeanPostProcessor;
+import com.learn.project.springframework.util.ClassUtils;
 import com.sun.jdi.connect.Connector;
 
 import java.util.ArrayList;
@@ -23,6 +24,12 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     private Map<String, RootBeanDefinition> mergedBeanDefinitions = new ConcurrentHashMap<>();
 
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
+
+    private final ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
+
+    public ClassLoader getClassLoader() {
+        return classLoader;
+    }
 
     /**
      * 使用模板方法 统一收口通用核心方法的调用逻辑和标准定义
