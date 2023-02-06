@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans>
     <!--userDao-->
-    <bean id="userDao" class="com.learn.project.springframework.dao.UserDao"/>
+    <bean id="userDao" class="com.learn.project.springframework.dao.UserDao" init-method="initDataMethod" destroy-method="destroyDataMethod"/>
 
     <!--userService-->
     <bean id="userService" class="com.learn.project.springframework.service.UserService">

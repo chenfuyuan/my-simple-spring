@@ -21,6 +21,16 @@ public abstract class AbstractBeanDefinition implements BeanDefinition {
      */
     private MutablePropertyValues propertyValues;
 
+    /**
+     * 初始化方法名称
+     */
+    private String initMethodName;
+
+    /**
+     * 销毁方法名称
+     */
+    private String destroyMethodName;
+
 
     protected AbstractBeanDefinition() {
 
@@ -36,6 +46,8 @@ public abstract class AbstractBeanDefinition implements BeanDefinition {
             if (originalAbd.hasPropertyValues()) {
                 setPropertyValues(new MutablePropertyValues(originalAbd.getPropertyValues()));
             }
+            setInitMethodName(originalAbd.getInitMethodName());
+            setDestroyMethodName(originalAbd.getDestroyMethodName());
         }
     }
 
@@ -68,5 +80,22 @@ public abstract class AbstractBeanDefinition implements BeanDefinition {
     @Override
     public boolean hasPropertyValues() {
         return this.propertyValues != null && !this.propertyValues.isEmpty();
+    }
+
+
+    public String getInitMethodName() {
+        return initMethodName;
+    }
+
+    public void setInitMethodName(String initMethodName) {
+        this.initMethodName = initMethodName;
+    }
+
+    public String getDestroyMethodName() {
+        return destroyMethodName;
+    }
+
+    public void setDestroyMethodName(String destroyMethodName) {
+        this.destroyMethodName = destroyMethodName;
     }
 }

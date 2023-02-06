@@ -1,5 +1,7 @@
 package com.learn.project.springframework.service;
 
+import com.learn.project.springframework.beans.factory.DisposableBean;
+import com.learn.project.springframework.beans.factory.InitializingBean;
 import com.learn.project.springframework.dao.UserDao;
 
 /**
@@ -8,7 +10,7 @@ import com.learn.project.springframework.dao.UserDao;
  * @author chenfuyuan
  * @date 2023/1/12 16:59
  */
-public class UserService {
+public class UserService implements InitializingBean, DisposableBean {
 
     private String uId;
 
@@ -23,6 +25,15 @@ public class UserService {
         System.out.println("查询用户信息!name=" + userDao.queryUserName(uId) + "company:" + company + " location:" + location);
     }
 
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("执行: userService.destroy");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("执行：userSerivce.afterPropertiesSet");
+    }
 
     public String getuId() {
         return uId;

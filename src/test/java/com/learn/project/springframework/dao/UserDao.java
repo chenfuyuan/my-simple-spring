@@ -13,7 +13,8 @@ public class UserDao {
 
     private static Map<String, String> userMap = new HashMap<>();
 
-    static{
+    public void initDataMethod() {
+        System.out.println("执行:userDao.init-method");
         userMap.put("10001", "小陈");
         userMap.put("10002", "小福");
         userMap.put("10003", "小源");
@@ -21,5 +22,10 @@ public class UserDao {
 
     public String queryUserName(String uId) {
         return userMap.get(uId);
+    }
+
+    public void destroyDataMethod() {
+        System.out.println("执行: destroy-method");
+        userMap.clear();
     }
 }

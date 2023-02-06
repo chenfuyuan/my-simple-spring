@@ -5,9 +5,14 @@ import com.learn.project.springframework.beans.BeansException;
 import com.learn.project.springframework.beans.MutablePropertyValues;
 import com.learn.project.springframework.beans.PropertyValue;
 import com.learn.project.springframework.beans.PropertyValues;
+import com.learn.project.springframework.beans.factory.DisposableBean;
+import com.learn.project.springframework.beans.factory.InitializingBean;
+import com.learn.project.springframework.beans.factory.config.BeanDefinition;
 import com.learn.project.springframework.beans.factory.config.BeanPostProcessor;
 import com.learn.project.springframework.util.Lists;
+import com.learn.project.springframework.util.StringUtils;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,6 +38,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         populateBean(beanName, mbd, instanceWrapper);
         Object bean = instanceWrapper.getWrappedInstance();
         bean = initializeBean(beanName, bean, mbd);
+        //注册实现了DisposableBean接口的Bean对象
+        registerDisposableBeanIfNecessary(beanName, bean, mbd);
         //缓存实例化的单例bean
         addSingleton(beanName, bean);
         return bean;
@@ -56,7 +63,27 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     private void invokeInitMethods(String beanName, Object bean, RootBeanDefinition mbd) throws Exception{
+        //1. 如果实现接口Initialization
+        if (bean instanceof InitializingBean) {
+            ((InitializingBean) bean).afterPropertiesSet();
+        }
+        //2. 配置信息 init-method
+        String initMethodName = mbd.getInitMethodName();
+        if (StringUtils.isNotEmpty(initMethodName)) {
+            Method initMethod = mbd.getBeanClass().getMethod(initMethodName);
+            if (null == initMethod) {
+                throw new BeansException("Could not find an init method named '" + initMethodName + "' on bean with name '" + beanName + "'");
+            }
+            //调用初始化方法
+            initMethod.invoke(bean);
+        }
 
+    }
+
+    private void registerDisposableBeanIfNecessary(String beanName, Object bean, RootBeanDefinition mbd) {
+        if (bean instanceof DisposableBean || StringUtils.isNotEmpty(mbd.getDestroyMethodName())) {
+            registerDisposableBean(beanName,new DisposableBeanAdapter(bean,beanName,mbd));
+        }
     }
 
 
