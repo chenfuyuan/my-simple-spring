@@ -10,6 +10,10 @@ import com.learn.project.springframework.beans.MutablePropertyValues;
  */
 public interface BeanDefinition {
 
+    String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;
+    String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
+
     /**
      * 获取BeanClass名称
      * @return

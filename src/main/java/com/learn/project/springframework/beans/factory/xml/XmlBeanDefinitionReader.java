@@ -11,6 +11,7 @@ import com.learn.project.springframework.beans.factory.support.BeanDefinitionReg
 import com.learn.project.springframework.beans.factory.support.RootBeanDefinition;
 import com.learn.project.springframework.core.io.Resource;
 import com.learn.project.springframework.core.io.ResourceLoader;
+import com.learn.project.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -84,6 +85,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             // 增加对init-method、destroy-method的读取支持
             String initMethodName = bean.getAttribute("init-method");
             String destroyMethodName = bean.getAttribute("destroy-method");
+
+            //新增对scope的解析
+            String beanScope = bean.getAttribute("scope");
+
             //获取Class
             Class<?> clazz = Class.forName(className);
             // 解析BeanName
@@ -96,6 +101,12 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             //设置initMethod和destroyMethod
             beanDefinition.setInitMethodName(initMethodName);
             beanDefinition.setDestroyMethodName(destroyMethodName);
+
+            //scope
+            if (StringUtils.isNotEmpty(beanScope)) {
+                beanDefinition.setScope(beanScope);
+            }
+
             //读取属性并填充
             NodeList beanConfigNodeList = bean.getChildNodes();
             int beanConfigNodeNum = beanConfigNodeList.getLength();

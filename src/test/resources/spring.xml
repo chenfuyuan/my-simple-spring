@@ -11,5 +11,7 @@
         <property name="location" value="深圳"/>
     </bean>
 
+    <bean id="proxyUserDao" class="com.learn.project.springframework.domain.ProxyBeanFactory"/>
+
     <bean id="fullAwareBean" class="com.learn.project.springframework.service.FullAwareBean"/>
 </beans>

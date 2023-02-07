@@ -31,6 +31,29 @@ public abstract class AbstractBeanDefinition implements BeanDefinition {
      */
     private String destroyMethodName;
 
+    private String scope = SCOPE_SINGLETON;
+
+    private boolean singleton = true;
+
+    private boolean prototype = false;
+
+    public void setScope(String scope) {
+        this.scope = scope;
+        this.singleton = SCOPE_SINGLETON.equals(scope);
+        this.prototype = SCOPE_PROTOTYPE.equals(scope);
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public boolean isSingleton() {
+        return singleton;
+    }
+
+    public boolean isPrototype() {
+        return prototype;
+    }
 
     protected AbstractBeanDefinition() {
 
@@ -48,6 +71,7 @@ public abstract class AbstractBeanDefinition implements BeanDefinition {
             }
             setInitMethodName(originalAbd.getInitMethodName());
             setDestroyMethodName(originalAbd.getDestroyMethodName());
+            setScope(originalAbd.getScope());
         }
     }
 

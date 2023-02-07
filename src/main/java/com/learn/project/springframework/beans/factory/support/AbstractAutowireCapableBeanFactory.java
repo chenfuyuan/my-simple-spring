@@ -28,7 +28,7 @@ import java.util.List;
  */
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
 
-    private InstantiationStrategy instantiationStrategy = new CglibInstantiationStrategy();
+    private InstantiationStrategy instantiationStrategy = new SimpleInstantiationStrategy();
 
     @Override
     protected Object createBean(String beanName, RootBeanDefinition mbd, Object[] args) {
@@ -45,7 +45,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         //注册实现了DisposableBean接口的Bean对象
         registerDisposableBeanIfNecessary(beanName, bean, mbd);
         //缓存实例化的单例bean
-        addSingleton(beanName, bean);
+        if (mbd.isSingleton()) {
+            //单例进行缓存
+            addSingleton(beanName, bean);
+        }
         return bean;
     }
 
@@ -104,6 +107,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     private void registerDisposableBeanIfNecessary(String beanName, Object bean, RootBeanDefinition mbd) {
+        if (!mbd.isSingleton()) {
+            //非单例对象，无需进行销毁操作
+            return;
+        }
         if (bean instanceof DisposableBean || StringUtils.isNotEmpty(mbd.getDestroyMethodName())) {
             registerDisposableBean(beanName,new DisposableBeanAdapter(bean,beanName,mbd));
         }

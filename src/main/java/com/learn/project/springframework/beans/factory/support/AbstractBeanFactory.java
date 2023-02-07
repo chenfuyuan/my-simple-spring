@@ -3,6 +3,7 @@ package com.learn.project.springframework.beans.factory.support;
 import com.learn.project.springframework.beans.BeansException;
 import com.learn.project.springframework.beans.factory.BeanFactory;
 import com.learn.project.springframework.beans.factory.ConfigurableBeanFactory;
+import com.learn.project.springframework.beans.factory.FactoryBean;
 import com.learn.project.springframework.beans.factory.config.BeanDefinition;
 import com.learn.project.springframework.beans.factory.config.BeanPostProcessor;
 import com.learn.project.springframework.util.ClassUtils;
@@ -19,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author chenfuyuan
  * @date 2023/1/7 16:41
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
     private Map<String, RootBeanDefinition> mergedBeanDefinitions = new ConcurrentHashMap<>();
 
@@ -57,7 +58,19 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
             return bean;
         }
         bean = createBean(beanName, getMergedBeanDefinition(beanName),args);
-        return bean;
+        return getObjectForBeanInstance(bean, beanName);
+    }
+
+    private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
+        if (!(beanInstance instanceof FactoryBean)) {
+            return beanInstance;
+        }
+        Object object = getCachedObjectForFactoryBean(beanName);
+        if (object == null) {
+            FactoryBean factoryBean = (FactoryBean) beanInstance;
+            object = getObjectFromFactoryBean(factoryBean, beanName);
+        }
+        return object;
     }
 
     protected RootBeanDefinition getMergedBeanDefinition(String beanName) {
