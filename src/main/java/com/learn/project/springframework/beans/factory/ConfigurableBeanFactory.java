@@ -1,6 +1,7 @@
 package com.learn.project.springframework.beans.factory;
 
 import com.learn.project.springframework.beans.factory.config.BeanPostProcessor;
+import com.learn.project.springframework.beans.factory.config.SingletonBeanRegistry;
 
 /**
  * ConfigurableBeanFactory
@@ -8,7 +9,7 @@ import com.learn.project.springframework.beans.factory.config.BeanPostProcessor;
  * @author chenfuyuan
  * @date 2023/1/19 10:05
  */
-public interface ConfigurableBeanFactory extends HierarchicalBeanFactory {
+public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, SingletonBeanRegistry {
 
     String SCOPE_SINGLETON = "singleton";
 
