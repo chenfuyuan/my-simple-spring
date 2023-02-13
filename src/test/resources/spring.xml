@@ -15,7 +15,7 @@
 
     <bean id="fullAwareBean" class="com.learn.project.springframework.service.FullAwareBean"/>
 
-    <bean class="com.learn.project.springframework.context.event.ContextRefreshedEvent"/>
-    <bean class="com.learn.project.springframework.event.CustomEvent"/>
-    <bean class="com.learn.project.springframework.context.event.ContextClosedEvent"/>
+    <bean class="com.learn.project.springframework.event.ContextClosedEventListener"/>
+    <bean class="com.learn.project.springframework.event.CustomEventListener"/>
+    <bean class="com.learn.project.springframework.event.ContextRefreshedEventListener"/>
 </beans>

@@ -5,6 +5,9 @@ import com.learn.project.springframework.context.support.ClassPathXmlApplication
 import com.learn.project.springframework.event.CustomEvent;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * EventTest
  *
