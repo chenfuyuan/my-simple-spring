@@ -15,9 +15,23 @@
         <junit.jupiter.version>5.9.0</junit.jupiter.version>
         <cglib.version>3.3.0</cglib.version>
         <hutool.all.version>5.8.11</hutool.all.version>
+        <aspectj.jweaver.version>1.9.19</aspectj.jweaver.version>
+        <javax.annotation.api.version>1.3.2</javax.annotation.api.version>
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>${javax.annotation.api.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.jweaver.version}</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
         <dependency>
             <groupId>cn.hutool</groupId>

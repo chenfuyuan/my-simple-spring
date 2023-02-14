@@ -4,13 +4,15 @@ import com.learn.project.springframework.beans.factory.DisposableBean;
 import com.learn.project.springframework.beans.factory.InitializingBean;
 import com.learn.project.springframework.dao.UserDao;
 
+import java.util.Random;
+
 /**
  * UserService
  *
  * @author chenfuyuan
  * @date 2023/1/12 16:59
  */
-public class UserService implements InitializingBean, DisposableBean {
+public class UserService implements IUserService,InitializingBean, DisposableBean {
 
     private String uId;
 
@@ -21,7 +23,13 @@ public class UserService implements InitializingBean, DisposableBean {
     private String location;
 
 
+    @Override
     public void queryUserInfo() {
+        try {
+            Thread.sleep(new Random(1).nextInt(100));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("查询用户信息!name=" + userDao.queryUserName(uId) + "company:" + company + " location:" + location);
     }
 

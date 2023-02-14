@@ -1,12 +1,9 @@
 package com.learn.project.springframework.testcase;
 
-import com.learn.project.springframework.context.ApplicationContext;
 import com.learn.project.springframework.context.support.ClassPathXmlApplicationContext;
 import com.learn.project.springframework.event.CustomEvent;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * EventTest
