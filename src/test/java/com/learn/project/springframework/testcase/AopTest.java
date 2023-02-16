@@ -9,7 +9,9 @@ import com.learn.project.springframework.context.support.ClassPathXmlApplication
 import com.learn.project.springframework.dao.IUserDao;
 import com.learn.project.springframework.dao.IUserDaoImpl;
 import com.learn.project.springframework.interceptor.UserServiceInterceptor;
+import com.learn.project.springframework.service.IMemberService;
 import com.learn.project.springframework.service.IUserService;
+import com.learn.project.springframework.service.MemberService;
 import com.learn.project.springframework.service.UserService;
 import org.junit.jupiter.api.Test;
 
@@ -50,5 +52,13 @@ public class AopTest {
 
         IUserService proxy_cglib = (IUserService) new Cglib2AopProxy(advisedSupport).getProxy();
         proxy_cglib.queryUserInfo();
+    }
+
+
+    @Test
+    public void test_aop() {
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring_advice.xml");
+        IMemberService memberService = applicationContext.getBean("memberService", MemberService.class);
+        System.out.println(memberService.queryUserInfo());
     }
 }

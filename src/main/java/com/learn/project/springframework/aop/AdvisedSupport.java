@@ -10,6 +10,7 @@ import org.aopalliance.intercept.MethodInterceptor;
  */
 public class AdvisedSupport {
 
+    private boolean proxyTargetClass = false;
 
     // 被代理的目标对象
     private TargetSource targetSource;
@@ -42,5 +43,13 @@ public class AdvisedSupport {
 
     public void setMethodMatcher(MethodMatcher methodMatcher) {
         this.methodMatcher = methodMatcher;
+    }
+
+    public boolean isProxyTargetClass() {
+        return false;
+    }
+
+    public void setProxyTargetClass(boolean proxyTargetClass) {
+        this.proxyTargetClass = proxyTargetClass;
     }
 }

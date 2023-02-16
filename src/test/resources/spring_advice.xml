@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans>
+
+    <!--userService-->
+    <bean id="memberService" class="com.learn.project.springframework.service.MemberService">
+    </bean>
+
+    <bean class="com.learn.project.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+
+    <bean id="beforeAdvice" class="com.learn.project.springframework.advice.MemberBeforeAdvice"></bean>
+
+    <bean id="methodInterceptor" class="com.learn.project.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">
+        <property name="advice" ref="beforeAdvice"></property>
+    </bean>
+
+    <bean id="pointcutAdvisor" class="com.learn.project.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* com.learn.project.springframework.service.IMemberService.*(..))"></property>
+        <property name="advice" ref="methodInterceptor"></property>
+    </bean>
+
+
+</beans>

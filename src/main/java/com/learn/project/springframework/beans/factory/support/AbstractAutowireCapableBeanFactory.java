@@ -12,7 +12,7 @@ import com.learn.project.springframework.beans.factory.BeanNameAware;
 import com.learn.project.springframework.beans.factory.DisposableBean;
 import com.learn.project.springframework.beans.factory.InitializingBean;
 import com.learn.project.springframework.beans.factory.config.BeanPostProcessor;
-import com.learn.project.springframework.context.ApplicationContextAware;
+import com.learn.project.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import com.learn.project.springframework.util.Lists;
 import com.learn.project.springframework.util.StringUtils;
 
@@ -36,20 +36,43 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     protected Object doCreateBean(String beanName, RootBeanDefinition mbd, Object[] args) {
+        Object bean = null;
+        bean = resolveBeforeInstantiation(beanName, mbd);
+        if (null != bean) {
+            return bean;
+        }
         //创建对象实例
         BeanWrapper instanceWrapper = createBeanInstance(mbd, beanName, args);
         //填充bean
         populateBean(beanName, mbd, instanceWrapper);
-        Object bean = instanceWrapper.getWrappedInstance();
+        bean = instanceWrapper.getWrappedInstance();
         bean = initializeBean(beanName, bean, mbd);
         //注册实现了DisposableBean接口的Bean对象
         registerDisposableBeanIfNecessary(beanName, bean, mbd);
         //缓存实例化的单例bean
         if (mbd.isSingleton()) {
             //单例进行缓存
-            addSingleton(beanName, bean);
+            registerSingleton(beanName, bean);
         }
         return bean;
+    }
+
+    private Object resolveBeforeInstantiation(String beanName, RootBeanDefinition mbd) {
+        Object bean = applyBeanPostProcessorsBeforeInstantiation(mbd.getBeanClass(), beanName);
+        if (bean != null) {
+            bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        }
+        return bean;
+    }
+
+    private Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
+                if (null != result) return result;
+            }
+        }
+        return null;
     }
 
     private Object initializeBean(String beanName, Object bean, RootBeanDefinition mbd) {
