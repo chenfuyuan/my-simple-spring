@@ -2,6 +2,7 @@ package com.learn.project.springframework.util;
 
 import cn.hutool.core.util.ClassUtil;
 import com.learn.project.springframework.context.ApplicationListener;
+import com.learn.project.springframework.core.lang.ClassScanner;
 import com.learn.project.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -110,7 +111,7 @@ public class ClassUtils {
      * @param componentAnnotation
      * @return
      */
-    public static Set<Class<?>> scanPackageByAnnotation(String basePackage, Class<Component> componentAnnotation) {
-        return ClassUtil.scanPackageByAnnotation(basePackage, componentAnnotation);
+    public static Set<Class<?>> scanPackageByAnnotation(String basePackage, Class<? extends Annotation> componentAnnotation) {
+        return ClassScanner.scanPackageByAnnotation(basePackage, componentAnnotation);
     }
 }
