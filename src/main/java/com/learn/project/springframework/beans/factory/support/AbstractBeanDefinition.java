@@ -37,6 +37,7 @@ public abstract class AbstractBeanDefinition implements BeanDefinition {
 
     private boolean prototype = false;
 
+    @Override
     public void setScope(String scope) {
         this.scope = scope;
         this.singleton = SCOPE_SINGLETON.equals(scope);

@@ -13,7 +13,9 @@ import org.w3c.dom.Node;
 public enum XmlBeanDefinitionType {
 
     BEAN("bean", Element.class),
-    PROPERTY("property",Element.class);
+    PROPERTY("property",Element.class),
+
+    COMPONENT_SCAN("component-scan", Element.class);
     /**
      * 节点名称
      */

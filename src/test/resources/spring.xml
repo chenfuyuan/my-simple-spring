@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans>
+    <component-scan base-package="com.learn.project.springframework"/>
     <!--userDao-->
     <bean id="userDao" class="com.learn.project.springframework.dao.UserDao" init-method="initDataMethod" destroy-method="destroyDataMethod"/>
 

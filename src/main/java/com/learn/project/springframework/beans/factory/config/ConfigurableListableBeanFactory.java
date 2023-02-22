@@ -5,6 +5,9 @@ import com.learn.project.springframework.beans.factory.AutowireCapableBeanFactor
 import com.learn.project.springframework.beans.factory.ConfigurableBeanFactory;
 import com.learn.project.springframework.beans.factory.ListableBeanFactory;
 
+import java.util.Collection;
+import java.util.Set;
+
 /**
  * ConfigurableListableBeanFactory
  *
@@ -21,4 +24,8 @@ public interface ConfigurableListableBeanFactory extends ListableBeanFactory, Au
 
 
     BeanDefinition getBeanDefinition(String beanName) throws BeansException;
+
+    String[] getBeanDefinitionNames();
+
+    Collection<BeanDefinition> getBeanDefinitions();
 }

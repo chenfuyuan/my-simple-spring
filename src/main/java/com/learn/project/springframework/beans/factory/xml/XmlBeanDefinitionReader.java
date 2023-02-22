@@ -9,9 +9,11 @@ import com.learn.project.springframework.beans.factory.config.RuntimeBeanReferen
 import com.learn.project.springframework.beans.factory.support.AbstractBeanDefinitionReader;
 import com.learn.project.springframework.beans.factory.support.BeanDefinitionRegistry;
 import com.learn.project.springframework.beans.factory.support.RootBeanDefinition;
+import com.learn.project.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import com.learn.project.springframework.core.io.Resource;
 import com.learn.project.springframework.core.io.ResourceLoader;
 import com.learn.project.springframework.util.StringUtils;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -71,9 +73,19 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         Document document = doLoadDocument(inputStream);
         Element root = document.getDocumentElement();
         NodeList childNodes = root.getChildNodes();
+
+
         for (int i = 0,length = childNodes.getLength(); i < length; i++) {
             Node node = childNodes.item(i);
             if (!checkXmlNode(node, XmlBeanDefinitionType.BEAN)) {
+                if (checkXmlNode(node, XmlBeanDefinitionType.COMPONENT_SCAN)) {
+                    Element componentScanNode = (Element) node;
+                    String scanPath = componentScanNode.getAttribute("base-package");
+                    if (StringUtils.isEmpty(scanPath)) {
+                        throw new BeansException("The value of base-package attribute can not be empty or null");
+                    }
+                    scanPackage(scanPath);
+                }
                 continue;
             }
             //解析bean标签
@@ -131,6 +143,15 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             }
             getRegister().registerBeanDefinition(beanName, beanDefinition);
         }
+    }
+
+    private void scanPackage(String scanPath) {
+        String[] basePackages = StringUtils.splitToArray(scanPath, ",");
+        if (basePackages == null || basePackages.length == 0) {
+            return;
+        }
+        ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(getRegister());
+        scanner.scan(basePackages);
     }
 
     private Document doLoadDocument(InputStream inputStream) throws ClassNotFoundException {

@@ -4,8 +4,10 @@ import com.learn.project.springframework.beans.BeansException;
 import com.learn.project.springframework.beans.factory.config.BeanDefinition;
 import com.learn.project.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * DefaultListableBeanFactory
@@ -29,6 +31,16 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
             throw new BeansException("No bean named '" + beanName + "' is defined");
         }
         return beanDefinition;
+    }
+
+    @Override
+    public String[] getBeanDefinitionNames() {
+        return beanDefinitionMap.keySet().toArray(new String[0]);
+    }
+
+    @Override
+    public Collection<BeanDefinition> getBeanDefinitions() {
+        return beanDefinitionMap.values();
     }
 
     @Override

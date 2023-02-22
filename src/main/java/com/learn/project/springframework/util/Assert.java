@@ -1,5 +1,7 @@
 package com.learn.project.springframework.util;
 
+import com.learn.project.springframework.beans.factory.FactoryBean;
+
 /**
  * Assert
  * copy by spring.core Assert
@@ -20,6 +22,12 @@ public abstract class Assert {
 
     public static void notNull(Object object, String message) {
         if (object == null) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void notEmpty(Object[] array, String message) {
+        if (array == null || array.length == 0) {
             throw new IllegalArgumentException(message);
         }
     }

@@ -25,4 +25,6 @@ public interface BeanDefinition {
     default boolean hasPropertyValues() {
         return !getPropertyValues().isEmpty();
     }
+
+    void setScope(String beanScope);
 }

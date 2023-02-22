@@ -1,9 +1,13 @@
 package com.learn.project.springframework.util;
 
+import cn.hutool.core.util.ClassUtil;
 import com.learn.project.springframework.context.ApplicationListener;
+import com.learn.project.springframework.stereotype.Component;
 
+import java.lang.annotation.Annotation;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * ClassUtils
@@ -98,5 +102,15 @@ public class ClassUtils {
      */
     public static boolean isCglibProxyClassName(String className) {
         return (className != null && className.contains("$$"));
+    }
+
+    /**
+     * 扫描包路径下的所有有关被@Component注解标记的类
+     * @param basePackage 包路径
+     * @param componentAnnotation
+     * @return
+     */
+    public static Set<Class<?>> scanPackageByAnnotation(String basePackage, Class<Component> componentAnnotation) {
+        return ClassUtil.scanPackageByAnnotation(basePackage, componentAnnotation);
     }
 }
